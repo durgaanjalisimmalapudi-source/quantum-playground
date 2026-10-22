@@ -3,7 +3,9 @@
  * Connects React UI to FastAPI / Qiskit Aer simulation engine.
  */
 
-const API_BASE = '/api';
+const DEFAULT_BASE = '/api';
+const DIRECT_BACKEND = 'http://127.0.0.1:8000/api';
+let activeBase = null;
 
 class ApiError extends Error {
   constructor(message, status = 500, detail = null) {
@@ -14,8 +16,32 @@ class ApiError extends Error {
   }
 }
 
+async function resolveBaseUrl() {
+  if (activeBase) return activeBase;
+  // Test /api proxy
+  try {
+    const res = await fetch(`${DEFAULT_BASE}/health`, { signal: AbortSignal.timeout(1200) });
+    if (res.ok) {
+      activeBase = DEFAULT_BASE;
+      return activeBase;
+    }
+  } catch {}
+
+  // Fallback to direct FastAPI endpoint (CORS enabled)
+  try {
+    const res = await fetch(`${DIRECT_BACKEND}/health`, { signal: AbortSignal.timeout(1500) });
+    if (res.ok) {
+      activeBase = DIRECT_BACKEND;
+      return activeBase;
+    }
+  } catch {}
+
+  return DEFAULT_BASE;
+}
+
 async function request(endpoint, options = {}) {
-  const url = `${API_BASE}${endpoint}`;
+  const base = await resolveBaseUrl();
+  const url = `${base}${endpoint}`;
   try {
     const res = await fetch(url, {
       headers: {
@@ -41,7 +67,8 @@ async function request(endpoint, options = {}) {
     if (err instanceof ApiError) {
       throw err;
     }
-    // Network or server unreachable error
+    // If the active base failed, reset activeBase so next call re-evaluates
+    activeBase = null;
     throw new ApiError(
       'Cannot connect to Quantum Playground backend. Ensure FastAPI server is running on http://127.0.0.1:8000',
       0,
