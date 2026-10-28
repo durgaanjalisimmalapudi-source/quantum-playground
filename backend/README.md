@@ -23,7 +23,7 @@ FastAPI and Qiskit simulation backend for the Quantum Playground educational pla
 ```bash
 # From workspace root:
 source .venv/bin/activate
-uvicorn backend.app.main:app --reload --port 8000
+PYTHONPATH=. uvicorn backend.app.main:app --reload --port 8000
 ```
 
 ## Running Tests

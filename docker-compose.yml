@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  quantum-quest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quantum_quest_app
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - DATABASE_URL=sqlite:////app/backend/data/quantum_quest.db
+    volumes:
+      - quantum_db_data:/app/backend/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  quantum_db_data:
+    driver: local

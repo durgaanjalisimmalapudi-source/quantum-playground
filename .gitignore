@@ -47,3 +47,9 @@ yarn-error.log*
 .idea/
 *.sublime-project
 *.sublime-workspace
+
+# Databases & local data
+*.db
+*.sqlite*
+backend/data/*.db
+

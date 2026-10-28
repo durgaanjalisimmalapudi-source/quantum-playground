@@ -1,195 +1,193 @@
-# Quantum Playground ⚛️
-> **Explore Quantum. Experiment Freely. Understand the Future.**
-
-Interactive Quantum Computing Education Website powered by **Qiskit** and **Qiskit Aer**, built for **QExpo 2026** under the **Quantum Education & Outreach** category.
-
-Developed by a team of two undergraduate AI & ML students:
-- **[Student Member 1 — Full Name]** — Quantum Algorithms & Simulation Backend ([University Placeholder])
-- **[Student Member 2 — Full Name]** — UI/UX Design & Pedagogical Engineering ([University Placeholder])
+# Quantum Quest: The Quantum Circuit Adventure ⚛️
+> **“Learn Quantum. Build Circuits. Master the Quantum Universe!”**  
+> *The Quantum Playground — Built for **QExpo 2026** Hackathon*  
+> **Problem Statement:** “Quantum Circuits: Single-Qubit Gates and Operations, Multi-Qubit Gates and Operations, and Design and Simulation of Quantum Circuits.”
 
 ---
 
-## 🌟 Overview & Scientific Architecture
+## 🌟 Executive Summary & Vision
 
-Quantum Playground bridges abstract linear algebra and intuitive quantum computing experimentation. Unlike static landing pages or hard-coded mockups, **all circuit simulations, statevectors, and finite-shot measurement collapse statistics are computed live on the local backend using Qiskit 1.4+ and Qiskit Aer (`AerSimulator`)**.
+**Quantum Quest: The Quantum Circuit Adventure** is a complete, modern, interactive, and visually stunning educational gaming platform built for **QExpo 2026**. It transforms complex quantum mechanics and quantum circuit architecture into an engaging, gamified adventure that bridges abstract linear algebra and hands-on intuition.
 
-```
-React (Vite + Tailwind CSS + Recharts)
-              │
-              ▼  HTTP JSON API (Vite Proxy: /api/*)
-FastAPI Backend (Python 3.12)
-              │
-              ▼
-Qiskit Circuit Builder (circuits.py)
-              ├────────────────────────────────────────┐
-              ▼                                        ▼
-   Statevector Analysis                   Qiskit Aer Simulation (AerSimulator)
-   - Exact Amplitudes α, β               - Finite-Shot Collapse (100–1000 shots)
-   - Magnitude, Phase (rad/deg)          - Observed Counts & Frequencies
-   - Theoretical Probabilities P=|α|²    - Statistical Variance
-              │                                        │
-              └───────────────────┬────────────────────┘
-                                  ▼
-           Structured Pedagogical Response & ASCII Circuit
-```
-
-### Key Modules
-1. **Qubit Explorer**:
-   - Inspect computational basis states $|0\rangle$ and $|1\rangle$.
-   - Apply Hadamard gates to create $|+\rangle = (|0\rangle + |1\rangle)/\sqrt{2}$ and $|-\rangle = (|0\rangle - |1\rangle)/\sqrt{2}$.
-   - Learn why $|+\rangle$ and $|-\rangle$ yield identical 50%/50% Z-basis probabilities yet possess an exact $180^\circ$ relative phase difference.
-   - Run single measurement collapse (1 shot) or finite statistical runs (100 shots).
-2. **Quantum Gate Lab**:
-   - Interactive 1-qubit circuit builder with Pauli-X (bit flip), Hadamard (superposition/interference), Pauli-Z (phase flip), and Pauli-Y.
-   - Curated benchmark presets:
-     - $X \to X$: Identity ($X^2 = I$, returns $|0\rangle$)
-     - $X \to H$: Prepares $|-\rangle$
-     - $H \to H$: Self-inverse interference ($H^2 = I$, destructive cancellation on $|1\rangle$)
-     - $H \to X$: Prepares $|+\rangle$
-   - Step-by-step mathematical derivation and real-time statevector tracking.
-3. **Entanglement Explorer**:
-   - Prepare and measure the 4 canonical Bell states:
-     - $|\Phi^+\rangle = (|00\rangle + |11\rangle)/\sqrt{2}$
-     - $|\Phi^-\rangle = (|00\rangle - |11\rangle)/\sqrt{2}$
-     - $|\Psi^+\rangle = (|01\rangle + |10\rangle)/\sqrt{2}$
-     - $|\Psi^-\rangle = (|01\rangle - |10\rangle)/\sqrt{2}$
-   - Finite-shot measurement (100 and 1000 shots) showing 100% correlation/anti-correlation.
-   - **Qiskit Little-Endian Bitstring Convention**: Documented and verified as $|q_1 q_0\rangle$ (qubit 0 is rightmost).
-   - **Scientific Rigor & Bell Inequality**: Clear pedagogical notes explaining that single-basis correlations do *not* prove quantum non-locality (classical paired coins could do the same); true demonstration requires testing Bell/CHSH inequalities across non-orthogonal angles.
-4. **Quantum Quiz Arena**:
-   - 12 interactive questions testing qubits, superposition, gates, measurement, entanglement, Born's rule, and Qiskit.
-   - Instant feedback, detailed explanations, score tracking, progress bar, and rank certification.
-5. **Expo Presentation Mode (Live Jury View)**:
-   - Presentation layout designed for exhibition laptops and projectors.
-   - Slide-by-slide jury walkthrough with key mathematical equations, 60-second spoken presenter scripts, bulleted talking points, and a "Rerun Simulation for Judges" live verification button.
+Rather than static textbook diagrams or hardcoded mockups, **all quantum circuit simulations, complex statevectors, Bell-state non-local correlations, and finite-shot measurement collapse statistics are computed dynamically using Qiskit 1.4+ and Qiskit Aer (`AerSimulator`)**, complemented by a high-precision pure-mathematics client-side quantum engine for offline resilience.
 
 ---
 
-## 🚀 Quick Launch Guide (macOS / VS Code)
+## 🎮 Core Platform Features
+
+### 1. Level-Based Quantum Gaming Journey (7 Missions)
+- **Level 1 — Qubit Explorer:** Classical bits vs qubits, superposition $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$, computational basis $\{|0\rangle, |1\rangle\}$, Born's rule, and wave-function collapse under finite-shot measurement.
+- **Level 2 — Single-Qubit Gate Academy:** Pauli-X (NOT), Pauli-Y, Pauli-Z, Hadamard (H), Phase (S, T), and continuous rotation gates ($R_X, R_Y, R_Z$).
+- **Level 3 — Bloch Sphere Adventure:** Fully interactive 3D Bloch sphere with real-time mouse orbit, statevector animation along spherical arcs, live $(\theta, \phi)$ spherical angles, and scientific distinction of global phase vs. relative phase.
+- **Level 4 — Multi-Qubit Mission:** Tensor products $\mathcal{H}_1 \otimes \mathcal{H}_2$, exponential state space scaling ($2^n$), controlled entangling gates ($CNOT$, $CZ$, $SWAP$).
+- **Level 5 — Bell State Challenge:** All 4 canonical Bell states ($|\Phi^+\rangle, |\Phi^-\rangle, |\Psi^+\rangle, |\Psi^-\rangle$), measurement in computational Z-basis and rotated X-basis, and the No-Signaling Theorem.
+- **Level 6 — Quantum Circuit Builder:** Visual drag-and-drop circuit editor (1–4 wires), step-by-step playhead execution, complex statevector amplitude tables, and shot histograms (100, 1024, 4096 shots).
+- **Level 7 — Quantum Master Challenge:** Boss-level circuit puzzles, interference cancellation locks, circuit equivalence verifications, and XP badge progression.
+- *Each level includes:* A simple explanation, visual demonstration, interactive activity, challenge puzzle, and a 3-question scientific quiz.
+
+### 2. Interactive Quantum Gate Library (13 Gates)
+Comprehensive interactive encyclopedia covering all single-qubit, rotation, and multi-qubit gates:
+- **X Gate:** Bit-flip ($|0\rangle \leftrightarrow |1\rangle$)
+- **Y Gate:** Bit-flip with relative phase shift ($i$)
+- **Z Gate:** Phase-flip on $|1\rangle$ component
+- **Hadamard (H):** Superposition generator; self-inverse ($H^2 = I$)
+- **S Gate:** $\pi/2$ phase shift ($\sqrt{Z}$)
+- **T Gate:** $\pi/4$ phase shift ($Z^{1/4}$)
+- **RX(θ), RY(θ), RZ(θ):** Continuous unitary rotations around $X, Y, Z$ axes
+- **CNOT (CX):** Two-qubit controlled bit-flip entangler
+- **CZ Gate:** Symmetric two-qubit controlled phase-flip
+- **SWAP Gate:** State exchange operator ($CX_{0,1} \cdot CX_{1,0} \cdot CX_{0,1}$)
+- **Identity (I):** Invariant operator
+*Includes:* Mathematical matrices, algebraic rules, Bloch sphere geometric actions, basis transformation tables, and an interactive real-time test bench.
+
+### 3. Interactive 3D Bloch Sphere
+- Hardware-accelerated 3D projection on HTML5 Canvas.
+- Orbit controls (mouse drag rotation around yaw and pitch, auto-orbit mode).
+- 3D labeled axes ($X, Y, Z$), North Pole $|0\rangle$, South Pole $|1\rangle$, and equatorial states ($|+\rangle, |-\rangle, |+i\rangle, |-i\rangle$).
+- Trajectory animation: Smooth spherical arc slerp between quantum states upon applying any gate.
+- Live polar coordinates ($\theta, \phi$), Cartesian vector $[x, y, z]$, and measurement probabilities $P(|0\rangle) = \cos^2(\theta/2)$, $P(|1\rangle) = \sin^2(\theta/2)$.
+- Scientific deep dive explaining why global phase $e^{i\gamma}$ is physically unobservable, while relative phase creates measurable quantum interference.
+
+### 4. Dedicated Bell States & Entanglement Explorer
+- Visual representations of all four Bell pairs:
+  - $|\Phi^+\rangle = (|00\rangle + |11\rangle)/\sqrt{2}$
+  - $|\Phi^-\rangle = (|00\rangle - |11\rangle)/\sqrt{2}$
+  - $|\Psi^+\rangle = (|01\rangle + |10\rangle)/\sqrt{2}$
+  - $|\Psi^-\rangle = (|01\rangle - |10\rangle)/\sqrt{2}$
+- Animated two-qubit entanglement link connecting Qubit A and Qubit B.
+- Measurement in both computational Z-basis and Hadamard-rotated X-basis.
+- Clear explanation of why a single Bloch sphere cannot represent entangled states (reduced density matrix is maximally mixed $\rho = \frac{1}{2}I$ at vector length $r=0$).
+- Explicit No-Signaling Theorem explanation proving entanglement does not permit faster-than-light communication.
+
+### 5. Multi-Qubit Circuit Designer & Simulator
+- 1 to 4 configurable qubit wires ($q_0, q_1, q_2, q_3$).
+- Wire initial state toggles ($|0\rangle$ or $|1\rangle$).
+- Gate palette for single-qubit, controlled, and swap operations.
+- Step-by-step circuit playhead (step forward, step backward, full execution).
+- Preset algorithms:
+  - Hadamard Superposition ($H$)
+  - Double NOT ($X \to X$)
+  - Superposition Cancellation ($H \to H$)
+  - Bell State ($|\Phi^+\rangle$)
+  - GHZ 3-Qubit Entangled State ($(|000\rangle + |111\rangle)/\sqrt{2}$)
+  - Full Quantum Teleportation Protocol
+  - SWAP Gate Circuit
+- Real-time Qiskit ASCII art diagram and OpenQASM export.
+
+### 6. Gaming & Gamification Mechanics
+- Player Level & XP Points system ($100$ to $600$ XP per mission).
+- Daily Quantum Challenge with countdown timer and streak tracker.
+- 60-Second Timed Sprint Mode with live score multiplier.
+- QExpo 2026 Leaderboard with demo competitors and live player rank.
+- Badges & Achievements gallery (First Superposition, Phase Alchemist, Spooky Action Hero, Circuit Architect, Teleportation Pioneer, CHSH Champion).
+- Web Audio Synthesizer: Procedural sci-fi quantum soundscapes (muted by default with navbar toggle).
+- Official printable **QExpo 2026 Quantum Master Certificate** with verifiable ID and student name.
+
+### 7. Judge Demo Tour (7-Step Guided Flow)
+Specially crafted for QExpo 2026 judges to evaluate the entire problem statement in under 3 minutes:
+1. **Start as Beginner:** Inspect basis states and prepare superposition.
+2. **Learn & Apply Hadamard:** Observe unitary transformation in Gate Lab.
+3. **Inspect 3D Bloch Sphere:** Watch statevector rotate along spherical arc.
+4. **Build a Bell State:** Place $H(q0)$ and $CX(q0 \to q1)$ in Circuit Simulator.
+5. **Inspect Probabilities:** Measure Bell state on Qiskit Aer in Z & X bases.
+6. **Solve a Challenge:** Complete a mission puzzle and 3-question quiz.
+7. **Unlock & Claim Certificate:** Earn XP, achieve Quantum Master tier, and view certificate.
+
+### 8. Team & Hackathon Section
+- Displays **QExpo 2026** prominently.
+- 3 Editable Team-Member cards with inline name editing and persistence.
+- Comprehensive About section outlining educational purpose, key innovations, and pedagogical methodology.
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technologies |
+|---|---|
+| **Frontend** | React 18, Vite 5, Tailwind CSS, Recharts, Lucide Icons |
+| **3D Visualization** | HTML5 Hardware-Accelerated 3D Canvas Engine |
+| **Audio** | Web Audio API Synthesizer (procedural quantum sound effects) |
+| **Backend** | Python 3.12, FastAPI, Uvicorn, Pydantic v2 |
+| **Quantum Simulation** | Qiskit 1.4+, Qiskit Aer (`AerSimulator`), NumPy |
+| **Testing** | Pytest, HTTPX, TestClient (36 comprehensive tests passing) |
+| **Persistence** | Browser LocalStorage (XP, levels, sound settings, team names) |
+
+---
+
+## 🚀 Quick Start Guide
 
 ### Prerequisites
-1. **Python 3.12** (or Python 3.10 / 3.11). Check with:
-   ```bash
-   python3 --version
-   ```
-2. **Node.js** (v18 or v20+) and **npm**. Check with:
-   ```bash
-   node -v
-   npm -v
-   ```
+- **Python 3.12** (or 3.10 / 3.11): `python3 --version`
+- **Node.js 18+** & **npm**: `node -v && npm -v`
 
 ---
 
 ### Step 1: Start the Backend (Terminal 1)
 
-Open a terminal in the root `quantum-playground/` folder:
-
 ```bash
-# 1. Create a Python 3.12 virtual environment (if not already created)
-python3.12 -m venv .venv
-
-# 2. Activate the virtual environment
+# 1. Activate virtual environment
 source .venv/bin/activate
 
-# 3. Upgrade pip and install dependencies
-pip install --upgrade pip
+# 2. Install dependencies (if needed)
 pip install -r backend/requirements.txt
 
-# 4. Start the FastAPI development server
-uvicorn backend.app.main:app --reload --port 8000
+# 3. Start the FastAPI simulation server
+PYTHONPATH=. uvicorn backend.app.main:app --reload --port 8000
 ```
-> The API will be available at: **http://127.0.0.1:8000**  
-> Interactive OpenAPI documentation: **http://127.0.0.1:8000/docs**
+Backend will be live at: `http://127.0.0.1:8000`  
+API Swagger Docs: `http://127.0.0.1:8000/docs`
 
 ---
 
 ### Step 2: Start the Frontend (Terminal 2)
 
-In VS Code, open a second terminal (`Ctrl + Shift + \`` or `Cmd + Shift + \``):
-
 ```bash
-# 1. Navigate to the frontend directory
 cd frontend
 
-# 2. Install dependencies (if not already installed)
-npm install
-
-# 3. Start the Vite development server
+# Start the Vite development server
 npm run dev
 ```
-> The website will open at: **http://localhost:5173**
+Frontend will be live at: `http://localhost:5173`
 
 ---
 
-### Windows (PowerShell) Alternative
+### Step 3: Run End-to-End Simulation Tests
 
-If running on Windows:
-
-```powershell
-# Backend (PowerShell)
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r backend\requirements.txt
-uvicorn backend.app.main:app --reload --port 8000
-
-# Frontend (Second PowerShell window)
-cd frontend
-npm install
-npm run dev
-```
-
----
-
-## 🧪 Running Automated Tests
-
-Run the complete backend test suite (30 unit and integration tests):
+To verify backend simulation accuracy and Qiskit Aer integration:
 
 ```bash
-source .venv/bin/activate
-pytest backend/tests/ -v
+# Run backend pytest suite (36 tests)
+.venv/bin/pytest backend/tests
+
+# Run end-to-end verification script against live server
+python3 verify_simulation.py
 ```
 
-### Verified Test Cases:
-- `test_qubit.py`: Basis state preparations ($|0\rangle, |1\rangle, |+\rangle, |-\rangle$), complex amplitude phase verification ($\pi$ relative phase), single-shot collapse, 250-shot statistical sum.
-- `test_gates.py`: Single X gate, $X \to X$ identity, $H \to H$ interference cancellation, $X \to H$ phase preparation, $H \to X$ symmetric superposition, input validation for illegal gates/shot counts.
-- `test_bell_states.py`: Superposition and theoretical probabilities for all 4 Bell states ($|\Phi^+\rangle, |\Phi^-\rangle, |\Psi^+\rangle, |\Psi^-\rangle$), singlet state phase check, 500-shot finite simulation correlation verification ($P(01)=0, P(10)=0$).
-- `test_integration.py`: End-to-end API verification for `/api/health`, `/api/qubit/prepare`, `/api/qubit/measure`, `/api/circuit/run`, `/api/bell/prepare`, and `/api/bell/measure`.
+---
+
+## 📡 REST API Specification
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/health` | GET | Backend status, Qiskit & Aer version numbers |
+| `/api/qubit/prepare` | POST | Single-qubit state preparation ($|0\rangle, |1\rangle, |+\rangle, |-\rangle$) |
+| `/api/qubit/measure` | POST | Finite-shot measurement simulation on single qubit |
+| `/api/circuit/run` | POST | 1-qubit gate sequence simulation |
+| `/api/bell/prepare` | POST | Bell state preparation ($|\Phi^+\rangle, |\Phi^-\rangle, |\Psi^+\rangle, |\Psi^-\rangle$) |
+| `/api/bell/measure` | POST | Bell state measurement in Z or X basis on Qiskit Aer |
+| `/api/circuit/simulate` | POST | Multi-qubit arbitrary circuit simulation (1–5 wires) |
+| `/api/teleport/simulate`| POST | 3-qubit quantum teleportation protocol simulation |
 
 ---
 
-## 🔍 How Frontend & Backend Communicate
+## 🏆 QExpo 2026 Judge Walkthrough Checklist
 
-1. The frontend uses a lightweight, robust API client located in [`frontend/src/api/client.js`](file:///Users/anjalisimmalapudi/Desktop/quantum-playground/frontend/src/api/client.js).
-2. Development requests are reverse-proxied by Vite (`/api/*` $\to$ `http://127.0.0.1:8000/api/*`), eliminating CORS friction.
-3. The top navigation bar maintains an active health-check pulse (`GET /api/health`).
-   - 🟢 **Green ("Qiskit Aer Active")**: The backend is healthy and simulator is online.
-   - 🔴 **Red ("Backend Offline")**: If the backend is stopped, a clear troubleshooting banner displays the command to restart it.
-
----
-
-## 🛑 Stopping the Application
-
-To shut down the servers:
-- In Terminal 1 (Backend): Press `Ctrl + C`
-- In Terminal 2 (Frontend): Press `Ctrl + C`
-- To deactivate the virtual environment: `deactivate`
+- [x] **Single-Qubit Operations:** Demonstrated in Qubit Explorer, Gate Lab, and 3D Bloch Sphere.
+- [x] **Multi-Qubit Operations:** Demonstrated with CNOT, CZ, and SWAP in Multi-Qubit Missions and Circuit Simulator.
+- [x] **Design & Simulation of Quantum Circuits:** Interactive drag-and-drop circuit builder with step-by-step statevector inspection and finite-shot measurement histograms.
+- [x] **Gamification:** 7 level missions, XP points, daily challenge, timed sprint, leaderboard, badges, and Quantum Master Certificate.
+- [x] **Scientific Integrity:** Real Qiskit Aer backend simulation, No-Signaling theorem disclaimer, and global vs relative phase distinction.
 
 ---
 
-## 🛠️ Troubleshooting
-
-- **Issue: `Command not found: python3.12`**  
-  You can use standard `python3` or brew: `/opt/homebrew/bin/python3 -m venv .venv`.
-- **Issue: Frontend displays "Backend Not Detected"**  
-  Ensure Terminal 1 is running `uvicorn backend.app.main:app --reload --port 8000`. You can test connectivity by visiting `http://127.0.0.1:8000/api/health` in your browser.
-- **Issue: Node version mismatch**  
-  Ensure Node $\ge 18$ is active. On macOS with nvm: `nvm use 20`.
-
----
-
-## 📜 QExpo 2026 Exhibition Statement
-
-> **Category**: Quantum Education & Outreach  
-> **Simulation Engine**: Local Qiskit 1.4+ and Qiskit Aer (`AerSimulator`)  
-> **Scientific Integrity**: All measurement distributions arise from real pseudo-random finite-shot quantum collapse simulations. Computational basis correlation limitations and Bell's theorem nuances are explicitly taught.
+*Developed with passion for **QExpo 2026** by the Quantum Quest Team.*

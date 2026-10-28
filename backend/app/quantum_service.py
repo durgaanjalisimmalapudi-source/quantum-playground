@@ -6,24 +6,41 @@ and clear scientific explanations.
 
 import cmath
 import math
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 import numpy as np
 
 from qiskit import QuantumCircuit
 from qiskit.quantum_info import Statevector
 from qiskit_aer import AerSimulator
 
-from app.circuits import (
-    build_single_qubit_circuit,
-    build_bell_state_circuit,
-    add_measurements,
-    get_circuit_ascii,
-)
-from app.schemas import (
-    Amplitude,
-    CircuitInfo,
-    QuantumExperimentResponse,
-)
+try:
+    from .circuits import (
+        build_single_qubit_circuit,
+        build_bell_state_circuit,
+        build_multi_qubit_circuit,
+        build_teleportation_circuit,
+        add_measurements,
+        get_circuit_ascii,
+    )
+    from .schemas import (
+        Amplitude,
+        CircuitInfo,
+        QuantumExperimentResponse,
+    )
+except ImportError:  # pragma: no cover - fallback for direct app.main execution
+    from app.circuits import (
+        build_single_qubit_circuit,
+        build_bell_state_circuit,
+        build_multi_qubit_circuit,
+        build_teleportation_circuit,
+        add_measurements,
+        get_circuit_ascii,
+    )
+    from app.schemas import (
+        Amplitude,
+        CircuitInfo,
+        QuantumExperimentResponse,
+    )
 
 # Initialize reusable Aer simulator
 _aer_simulator = AerSimulator()
@@ -131,8 +148,8 @@ def get_qubit_order_note(num_qubits: int) -> str:
     if num_qubits == 1:
         return "Single qubit state represented in standard basis {|0⟩, |1⟩}."
     return (
-        "Qiskit bitstring convention: Little-endian ordering |q₁q₀⟩ where qubit 0 is the "
-        "rightmost bit (least significant) and qubit 1 is the leftmost bit."
+        f"Qiskit bitstring convention ({num_qubits} qubits): Little-endian ordering |q_{num_qubits-1}...q_1 q_0⟩ "
+        "where qubit 0 is the rightmost bit and qubit n-1 is the leftmost bit."
     )
 
 # --- Service API Functions ---
@@ -243,17 +260,10 @@ def run_gate_circuit(initial_state: str = "0", gates: List[str] = None, shots: i
     amplitudes, probabilities = extract_statevector_data(qc)
     circuit_ascii = get_circuit_ascii(qc)
     
-    # Formulate step-by-step derivation
     steps = [f"Initial: |{initial_state}⟩"]
-    curr = initial_state
     for g in gates:
         steps.append(f"—[{g}]→")
     circuit_summary = " ".join(steps)
-    
-    # Check known benchmark experiments
-    seq_str = " -> ".join(gates)
-    derivation = ""
-    custom_explanation = ""
     
     if gates == ["X", "X"]:
         derivation = "X X |0⟩ = X |1⟩ = |0⟩. (X² = I, Pauli-X is an involution: flipping twice restores the initial state)."
@@ -297,9 +307,9 @@ def run_gate_circuit(initial_state: str = "0", gates: List[str] = None, shots: i
         qubit_order_note=get_qubit_order_note(1)
     )
 
-def prepare_bell_state(state_name: str) -> QuantumExperimentResponse:
+def prepare_bell_state(state_name: str, basis: str = "Z") -> QuantumExperimentResponse:
     """Prepares one of the 4 canonical Bell states."""
-    qc = build_bell_state_circuit(state_name)
+    qc = build_bell_state_circuit(state_name, basis=basis)
     amplitudes, probabilities = extract_statevector_data(qc)
     circuit_ascii = get_circuit_ascii(qc)
     
@@ -318,7 +328,8 @@ def prepare_bell_state(state_name: str) -> QuantumExperimentResponse:
             "desc": (
                 "Maximally entangled state with a relative phase of π between |00⟩ and |11⟩. "
                 "In computational basis (Z-basis) measurements, it yields the exact same 50% 00 and 50% 11 "
-                "outcomes as |Φ+⟩. Computational measurement alone cannot distinguish the relative phase!"
+                "outcomes as |Φ+⟩. When measured in the X-basis (applying H before measurement), "
+                "phase interference reveals |++⟩ vs |--⟩ correlation differences!"
             )
         },
         "psi_plus": {
@@ -342,11 +353,13 @@ def prepare_bell_state(state_name: str) -> QuantumExperimentResponse:
     key = state_name.lower().replace(" ", "_")
     info = meta.get(key, meta["phi_plus"])
     
+    basis_note = f" (Measured in {basis}-basis)" if basis != "Z" else ""
+    
     return QuantumExperimentResponse(
         experiment="Entanglement Explorer",
-        state_label=info["name"],
+        state_label=f"{info['name']}{basis_note}",
         initial_state="|00⟩",
-        gates=["H(q0)", "CX(q0, q1)"],
+        gates=["H(q0)", "CX(q0, q1)"] if basis == "Z" else ["H(q0)", "CX(q0, q1)", "H(q0)", "H(q1)"],
         circuit=CircuitInfo(
             ascii_art=circuit_ascii,
             num_qubits=2,
@@ -360,14 +373,19 @@ def prepare_bell_state(state_name: str) -> QuantumExperimentResponse:
         frequencies=None,
         shots=None,
         math_derivation=info["math"],
-        explanation=info["desc"],
+        explanation=info["desc"] + (
+            "\n\n[NO-FASTER-THAN-LIGHT SIGNALING]: Entanglement creates non-local correlations, "
+            "but CANNOT transmit information faster than light (No-Signaling Theorem). "
+            "Any observer measuring their single qubit sees only random 50/50 noise unless both parties "
+            "compare results over a classical channel."
+        ),
         qubit_order_note=get_qubit_order_note(2)
     )
 
-def measure_bell_state(state_name: str, shots: int = 1000) -> QuantumExperimentResponse:
-    """Measures a Bell state circuit with a given number of shots using Qiskit Aer."""
-    response = prepare_bell_state(state_name)
-    qc = build_bell_state_circuit(state_name)
+def measure_bell_state(state_name: str, shots: int = 1000, basis: str = "Z") -> QuantumExperimentResponse:
+    """Measures a Bell state circuit with a given number of shots and basis using Qiskit Aer."""
+    response = prepare_bell_state(state_name, basis=basis)
+    qc = build_bell_state_circuit(state_name, basis=basis)
     counts, frequencies = run_finite_measurement_simulation(qc, shots=shots)
     
     response.counts = counts
@@ -375,12 +393,114 @@ def measure_bell_state(state_name: str, shots: int = 1000) -> QuantumExperimentR
     response.shots = shots
     
     response.explanation += (
-        f"\n\n[SIMULATION EXPERIMENT - {shots} SHOTS]: Qiskit Aer simulation generated counts: "
+        f"\n\n[SIMULATION EXPERIMENT - {shots} SHOTS IN {basis.upper()}-BASIS]: Qiskit Aer simulation generated counts: "
         f"{', '.join(f'{k}: {v}' for k, v in counts.items())}. "
-        "Notice the perfect correlation: only the entangled pairs appear. "
+        "Notice the correlations: in computational basis, entangled pairs appear. "
         "IMPORTANT NOTE FOR JUDGES: Observing 50/50 correlations in a single measurement basis does NOT alone "
         "disprove local hidden variable theories (classical shared randomness can also produce matching coins). "
         "Proving true quantum non-locality requires Bell/CHSH tests measuring across rotated non-orthogonal bases."
     )
     
     return response
+
+def simulate_multi_qubit_circuit(
+    num_qubits: int = 2,
+    initial_states: Optional[List[str]] = None,
+    operations: Optional[List[Any]] = None,
+    shots: int = 1024,
+    measure: bool = True
+) -> QuantumExperimentResponse:
+    """Simulates an arbitrary multi-qubit circuit with statevector and shot statistics."""
+    qc = build_multi_qubit_circuit(
+        num_qubits=num_qubits,
+        initial_states=initial_states,
+        operations=operations
+    )
+    amplitudes, probabilities = extract_statevector_data(qc)
+    circuit_ascii = get_circuit_ascii(qc)
+    
+    gate_seq = []
+    if operations:
+        for op in operations:
+            g = getattr(op, "gate", None) or op.get("gate", "")
+            t = getattr(op, "target", None) if hasattr(op, "target") else op.get("target", 0)
+            c = getattr(op, "control", None) if hasattr(op, "control") else op.get("control")
+            if c is not None:
+                gate_seq.append(f"{g}(q{c}→q{t})")
+            else:
+                gate_seq.append(f"{g}(q{t})")
+                
+    counts, frequencies = (None, None)
+    if measure:
+        counts, frequencies = run_finite_measurement_simulation(qc, shots=shots)
+        
+    initial_str = "".join(initial_states) if initial_states else "0" * num_qubits
+    
+    return QuantumExperimentResponse(
+        experiment="Circuit Simulator",
+        state_label=f"{num_qubits}-Qubit Custom Circuit ({len(operations or [])} gates)",
+        initial_state=f"|{initial_str}⟩",
+        gates=gate_seq,
+        circuit=CircuitInfo(
+            ascii_art=circuit_ascii,
+            num_qubits=num_qubits,
+            depth=qc.depth(),
+            gate_count=len(qc.data),
+            gate_sequence=gate_seq
+        ),
+        statevector=amplitudes,
+        probabilities=probabilities,
+        counts=counts,
+        frequencies=frequencies,
+        shots=shots if measure else None,
+        math_derivation=f"Circuit with {num_qubits} qubits, depth {qc.depth()}, {len(qc.data)} quantum gates.",
+        explanation=(
+            f"Successfully executed {num_qubits}-qubit circuit on Qiskit Aer simulator. "
+            f"Full Hilbert space dimension is 2^{num_qubits} = {2**num_qubits}. "
+            "Examine the statevector amplitudes, complex phases, and measurement probability distribution."
+        ),
+        qubit_order_note=get_qubit_order_note(num_qubits)
+    )
+
+def simulate_teleportation(qubit_state: str = "+", shots: int = 1024) -> QuantumExperimentResponse:
+    """Simulates quantum teleportation protocol transferring state from Alice to Bob."""
+    qc = build_teleportation_circuit(state_type=qubit_state)
+    result = _aer_simulator.run(qc, shots=shots).result()
+    raw_counts = result.get_counts()
+    circuit_ascii = get_circuit_ascii(qc)
+    
+    counts: Dict[str, int] = {}
+    frequencies: Dict[str, float] = {}
+    for k, v in raw_counts.items():
+        counts[k] = v
+        frequencies[k] = round(v / shots, 4)
+        
+    return QuantumExperimentResponse(
+        experiment="Quantum Teleportation",
+        state_label=f"Teleportation of |{qubit_state}⟩",
+        initial_state=f"|{qubit_state}⟩ ⊗ |00⟩",
+        gates=["H(1)", "CX(1,2)", "CX(0,1)", "H(0)", "Measure", "Conditional Z, X"],
+        circuit=CircuitInfo(
+            ascii_art=circuit_ascii,
+            num_qubits=3,
+            depth=qc.depth(),
+            gate_count=len(qc.data),
+            gate_sequence=["StatePrep", "BellPair", "BellMeas", "Correction"]
+        ),
+        statevector=[],
+        probabilities={k: v / shots for k, v in counts.items()},
+        counts=counts,
+        frequencies=frequencies,
+        shots=shots,
+        math_derivation=(
+            "|ψ⟩_A ⊗ |Φ+⟩_AB = 1/2 [ |00⟩_A (α|0⟩+β|1⟩)_B + |01⟩_A (α|1⟩+β|0⟩)_B + "
+            "|10⟩_A (α|0⟩-β|1⟩)_B + |11⟩_A (α|1⟩-β|0⟩)_B ]"
+        ),
+        explanation=(
+            "Quantum Teleportation protocol transfers an unknown quantum state |ψ⟩ from Alice (q0) to Bob (q2) "
+            "using a shared pre-entangled Bell pair (q1, q2) and 2 classical bits sent through a classical channel. "
+            "Notice that no matter which of the 4 Bell outcomes Alice observes, Bob applies the corresponding Pauli "
+            "correction (I, X, Z, or ZX) to reconstruct the exact original state |ψ⟩ with 100% fidelity!"
+        ),
+        qubit_order_note="Qubit 0: Alice's input, Qubit 1: Alice's Bell half, Qubit 2: Bob's received qubit."
+    )
