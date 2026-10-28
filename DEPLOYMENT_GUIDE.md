@@ -19,13 +19,17 @@ The backend now uses **SQLAlchemy ORM** with automatic database persistence:
 
 ### Option 1: 1-Click Render Deployment (Recommended & Free Tier)
 
-1. Push this repository to **GitHub**.
-2. Go to [Render.com](https://render.com) and click **New > Web Service**.
-3. Select your GitHub repository.
-4. Set the following configuration:
-   - **Environment**: `Docker`
-   - **Branch**: `main`
-   - **Plan**: Free
+The repository includes a production [`render.yaml`](file:///Users/anjalisimmalapudi/Desktop/quantum-playground/render.yaml) blueprint and [`.dockerignore`](file:///Users/anjalisimmalapudi/Desktop/quantum-playground/.dockerignore) for zero-config Render deployments:
+
+1. Push this repository to **GitHub** (already synchronized with `main`).
+2. Go to [Render.com](https://render.com) and click **New > Blueprint** (or **New > Web Service**).
+3. Select your GitHub repository (`quantum-playground`).
+4. If using **Blueprint**, Render automatically configures the Docker environment, health check at `/api/health`, and port routing from `render.yaml`.
+   - If using **Web Service**, set:
+     - **Environment**: `Docker`
+     - **Branch**: `main`
+     - **Health Check Path**: `/api/health`
+     - **Plan**: Free
 5. Render will automatically build the multi-stage `Dockerfile`, start the server on `$PORT`, and serve both the React frontend and FastAPI backend with SQLite persistence!
 6. *(Optional)* Add a free **Render PostgreSQL** database:
    - Create a PostgreSQL database on Render.
