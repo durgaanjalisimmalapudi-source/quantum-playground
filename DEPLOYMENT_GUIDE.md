@@ -67,7 +67,36 @@ The application will be live at `http://localhost:8000` with the database stored
 
 ---
 
-### Option 4: Split Deployment (Frontend on Vercel + Backend on Render/Railway)
+---
+
+### Option 4: Netlify Deployment (Frontend Only or Split Architecture)
+
+> **Important**: Netlify is a static web and serverless host. It **cannot** run persistent Python servers (`uvicorn`), C++ compiled libraries (`qiskit-aer`), or persistent SQLite files.
+
+You have two choices if deploying to **Netlify**:
+
+#### Choice A: Full-Stack (Netlify UI + Free Render/Railway Python Backend) — Recommended for Netlify
+1. Deploy the backend to **Render** or **Railway** using the provided `Dockerfile`.
+2. Get your backend URL (e.g. `https://quantum-quest-backend.onrender.com`).
+3. Connect your GitHub repository to **Netlify**:
+   - The repository includes [`netlify.toml`](file:///Users/anjalisimmalapudi/Desktop/quantum-playground/netlify.toml), so Netlify will automatically detect:
+     - **Base directory**: `frontend`
+     - **Build command**: `npm run build`
+     - **Publish directory**: `dist`
+4. In Netlify Site Settings > **Environment variables**, set:
+   - `VITE_API_URL` = `https://quantum-quest-backend.onrender.com`
+5. Deploy! The React UI is delivered via Netlify CDN and automatically communicates with the cloud backend for database saves and Qiskit simulation.
+
+#### Choice B: Standalone Static Netlify (Zero Backend)
+1. Simply connect this repository to **Netlify** and click **Deploy**.
+2. Netlify will build the frontend cleanly using `netlify.toml`.
+3. In this mode:
+   - The interactive 3D Bloch sphere, Gate Lab, and circuit simulator run directly inside the browser using the built-in JavaScript quantum engine (`quantumEngine.js`).
+   - Student session progress and leaderboard scores are stored locally in the student's browser `localStorage`.
+
+---
+
+### Option 5: Split Deployment (Frontend on Vercel + Backend on Render/Railway)
 
 If you prefer hosting the React frontend on **Vercel** and the Python/Qiskit backend on **Render/Railway**:
 
@@ -79,7 +108,7 @@ If you prefer hosting the React frontend on **Vercel** and the Python/Qiskit bac
    - Root directory: `frontend`
    - Build command: `npm run build`
    - Output directory: `dist`
-   - In `frontend/vite.config.js`, or by setting the environment variable in `client.js`, point `/api` to your backend URL.
+   - Environment Variable: `VITE_API_URL` = `https://quantum-quest-api.onrender.com`
 
 ---
 

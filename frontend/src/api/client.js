@@ -6,7 +6,8 @@
 
 import { simulateLocalMultiQubit, simulateLocalQubit, simulateLocalBell } from '../utils/quantumEngine';
 
-const DEFAULT_BASE = '/api';
+const ENV_BACKEND = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+const DEFAULT_BASE = ENV_BACKEND ? `${ENV_BACKEND}/api` : '/api';
 const DIRECT_BACKEND = 'http://127.0.0.1:8000/api';
 let activeBase = null;
 
@@ -21,6 +22,18 @@ class ApiError extends Error {
 
 async function resolveBaseUrl() {
   if (activeBase) return activeBase;
+
+  // If explicit external backend is provided via environment variable, test that first
+  if (ENV_BACKEND) {
+    try {
+      const res = await fetch(`${DEFAULT_BASE}/health`, { signal: AbortSignal.timeout(2000) });
+      if (res.ok) {
+        activeBase = DEFAULT_BASE;
+        return activeBase;
+      }
+    } catch {}
+  }
+
   try {
     const res = await fetch(`${DEFAULT_BASE}/health`, { signal: AbortSignal.timeout(1000) });
     if (res.ok) {
@@ -342,7 +355,8 @@ export const api = {
   },
 
   getExportUrl() {
-    return '/api/leaderboard/export';
+    const base = activeBase || DEFAULT_BASE;
+    return `${base}/leaderboard/export`;
   },
 };
 
