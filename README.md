@@ -93,10 +93,35 @@ Specially crafted for QExpo 2026 judges to evaluate the entire problem statement
 6. **Solve a Challenge:** Complete a mission puzzle and 3-question quiz.
 7. **Unlock & Claim Certificate:** Earn XP, achieve Quantum Master tier, and view certificate.
 
-### 8. Team & Hackathon Section
-- Displays **QExpo 2026** prominently.
-- 3 Editable Team-Member cards with inline name editing and persistence.
-- Comprehensive About section outlining educational purpose, key innovations, and pedagogical methodology.
+### 8. Multi-Student Session Switcher & Persistent Database
+- **Student Profile Management:** Allows multiple students to enter their name, school, select a quantum avatar (⚛️, 🚀, 🔬, ⚡, 🌌, 🧠, 🐱), and track their individual XP points, badges, and completed missions.
+- **SQLAlchemy Database Layer:** All student profiles and scores are stored in persistent tables (`students` and `leaderboard_entries`), with automatic fallback to SQLite or cloud PostgreSQL via `DATABASE_URL`.
+- **Live Leaderboard & Expo Admin Controls:**
+  - Real-time ranking with medal icons and live player count.
+  - **Wipe Board (Clean Slate):** Instantly wipe all test entries with admin key `qexpo2026` for a fresh expo day.
+  - **Reset to Benchmark:** Restore 5 scientific benchmark entries.
+  - **Direct CSV Export:** Download complete student scores as CSV via `/api/leaderboard/export`.
+
+### 9. Cinematic Quantum Background Animation
+- Custom HTML5 Canvas engine featuring 45 floating quantum particle nodes, dynamic entanglement lines, interfering wavefunctions, wireframe Bloch sphere projections, and cursor gravitational interaction.
+
+### 10. Judge Demo Tour (7-Step Guided Flow)
+Specially crafted for QExpo 2026 judges to evaluate the entire problem statement in under 3 minutes:
+1. **Start as Beginner:** Inspect basis states and prepare superposition.
+2. **Learn & Apply Hadamard:** Observe unitary transformation in Gate Lab.
+3. **Inspect 3D Bloch Sphere:** Watch statevector rotate along spherical arc.
+4. **Build a Bell State:** Place $H(q0)$ and $CX(q0 \to q1)$ in Circuit Simulator.
+5. **Inspect Probabilities:** Measure Bell state on Qiskit Aer in Z & X bases.
+6. **Solve a Challenge:** Complete a mission puzzle and 3-question quiz.
+7. **Unlock & Claim Certificate:** Earn XP, achieve Quantum Master tier, and view certificate.
+
+---
+
+## 📚 Complete Project Documentation
+
+For exhaustive technical details, mathematical formulations, database schemas, and complete API specs, please refer to:
+- 📖 [**Complete Technical Documentation (DOCUMENTATION.md)**](DOCUMENTATION.md)
+- 🚀 [**Production Deployment Guide (DEPLOYMENT_GUIDE.md)**](DEPLOYMENT_GUIDE.md)
 
 ---
 
@@ -105,12 +130,13 @@ Specially crafted for QExpo 2026 judges to evaluate the entire problem statement
 | Layer | Technologies |
 |---|---|
 | **Frontend** | React 18, Vite 5, Tailwind CSS, Recharts, Lucide Icons |
-| **3D Visualization** | HTML5 Hardware-Accelerated 3D Canvas Engine |
+| **3D & Canvas Visualization** | HTML5 Hardware-Accelerated 3D Bloch Canvas & Dynamic Particle Background |
 | **Audio** | Web Audio API Synthesizer (procedural quantum sound effects) |
 | **Backend** | Python 3.12, FastAPI, Uvicorn, Pydantic v2 |
 | **Quantum Simulation** | Qiskit 1.4+, Qiskit Aer (`AerSimulator`), NumPy |
-| **Testing** | Pytest, HTTPX, TestClient (36 comprehensive tests passing) |
-| **Persistence** | Browser LocalStorage (XP, levels, sound settings, team names) |
+| **Database & Persistence** | SQLAlchemy ORM, SQLite (`backend/data/quantum_quest.db`), PostgreSQL |
+| **Testing** | Pytest, HTTPX, TestClient (40 comprehensive tests passing) |
+| **Containerization & Hosting** | Docker (multi-stage build), Docker Compose, Netlify (`netlify.toml`), Render |
 
 ---
 
@@ -156,16 +182,16 @@ Frontend will be live at: `http://localhost:5173`
 To verify backend simulation accuracy and Qiskit Aer integration:
 
 ```bash
-# Run backend pytest suite (36 tests)
+# Run backend pytest suite (40 tests)
 .venv/bin/pytest backend/tests
 
-# Run end-to-end verification script against live server
+# Run end-to-end physics verification script against live server
 python3 verify_simulation.py
 ```
 
 ---
 
-## 📡 REST API Specification
+## 📡 Key REST API Endpoints
 
 | Endpoint | Method | Description |
 |---|---|---|
@@ -177,6 +203,13 @@ python3 verify_simulation.py
 | `/api/bell/measure` | POST | Bell state measurement in Z or X basis on Qiskit Aer |
 | `/api/circuit/simulate` | POST | Multi-qubit arbitrary circuit simulation (1–5 wires) |
 | `/api/teleport/simulate`| POST | 3-qubit quantum teleportation protocol simulation |
+| `/api/student/{name}` | GET | Get student profile, saved missions & rank |
+| `/api/student/save` | POST | Save student XP, completed missions & badges to DB |
+| `/api/leaderboard` | GET | Query persistent ranked leaderboard entries |
+| `/api/leaderboard/submit`| POST | Submit student score with upsert logic |
+| `/api/leaderboard/clear` | POST | Admin clear leaderboard for new expo session |
+| `/api/leaderboard/reset` | POST | Reset leaderboard to benchmark demo entries |
+| `/api/leaderboard/export`| GET | Download full student rankings as CSV |
 
 ---
 
@@ -186,6 +219,7 @@ python3 verify_simulation.py
 - [x] **Multi-Qubit Operations:** Demonstrated with CNOT, CZ, and SWAP in Multi-Qubit Missions and Circuit Simulator.
 - [x] **Design & Simulation of Quantum Circuits:** Interactive drag-and-drop circuit builder with step-by-step statevector inspection and finite-shot measurement histograms.
 - [x] **Gamification:** 7 level missions, XP points, daily challenge, timed sprint, leaderboard, badges, and Quantum Master Certificate.
+- [x] **Database & Multi-Student Workflow:** Persistent database storage for students and leaderboard with CSV export and admin wiping.
 - [x] **Scientific Integrity:** Real Qiskit Aer backend simulation, No-Signaling theorem disclaimer, and global vs relative phase distinction.
 
 ---
