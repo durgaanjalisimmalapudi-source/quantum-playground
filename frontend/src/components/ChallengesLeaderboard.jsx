@@ -253,7 +253,7 @@ export default function ChallengesLeaderboard({
   });
 
   return (
-    <div className="bg-slate-900/90 rounded-2xl border border-amber-500/30 p-6 shadow-2xl backdrop-blur-md">
+    <div className="bg-slate-900/90 rounded-2xl border border-amber-500/30 p-3.5 sm:p-6 shadow-2xl backdrop-blur-md">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
         <div>
@@ -271,10 +271,10 @@ export default function ChallengesLeaderboard({
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+        <div className="flex items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 overflow-x-auto max-w-full touch-pan-x scrollbar-thin">
           <button
             onClick={() => setActiveTab('leaderboard')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shrink-0 min-h-[36px] ${
               activeTab === 'leaderboard'
                 ? 'bg-amber-600 text-white shadow'
                 : 'text-slate-400 hover:text-white'
@@ -285,7 +285,7 @@ export default function ChallengesLeaderboard({
           </button>
           <button
             onClick={() => setActiveTab('timed')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shrink-0 min-h-[36px] ${
               activeTab === 'timed'
                 ? 'bg-amber-600 text-white shadow'
                 : 'text-slate-400 hover:text-white'
@@ -296,7 +296,7 @@ export default function ChallengesLeaderboard({
           </button>
           <button
             onClick={() => setActiveTab('daily')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shrink-0 min-h-[36px] ${
               activeTab === 'daily'
                 ? 'bg-amber-600 text-white shadow'
                 : 'text-slate-400 hover:text-white'
@@ -307,7 +307,7 @@ export default function ChallengesLeaderboard({
           </button>
           <button
             onClick={() => setActiveTab('achievements')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shrink-0 min-h-[36px] ${
               activeTab === 'achievements'
                 ? 'bg-amber-600 text-white shadow'
                 : 'text-slate-400 hover:text-white'
@@ -425,8 +425,11 @@ export default function ChallengesLeaderboard({
 
           {/* Leaderboard Table */}
           <div className="rounded-xl bg-slate-950 border border-slate-800 overflow-hidden shadow-inner">
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left font-mono">
+            <div className="sm:hidden text-center text-[10px] text-cyan-400/80 font-mono py-1.5 bg-cyan-950/40 border-b border-slate-800 flex items-center justify-center gap-1.5">
+              <span>⇄ Swipe horizontally to view full rankings table</span>
+            </div>
+            <div className="overflow-x-auto touch-pan-x">
+              <table className="w-full text-xs text-left font-mono min-w-[540px]">
                 <thead>
                   <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 text-[11px]">
                     <th className="py-3 px-4">Rank</th>
@@ -620,8 +623,8 @@ export default function ChallengesLeaderboard({
 
       {/* Tab 2: Timed Sprint */}
       {activeTab === 'timed' && (
-        <div className="p-6 rounded-xl bg-slate-950 border border-slate-800 space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="p-3.5 sm:p-6 rounded-xl bg-slate-950 border border-slate-800 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
             <div>
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
                 <Clock className="w-5 h-5 text-amber-400" />
@@ -632,7 +635,7 @@ export default function ChallengesLeaderboard({
               </p>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 self-end sm:self-auto">
               <div className="font-mono text-xl font-black text-amber-400">
                 {timedSeconds}s
               </div>
@@ -665,7 +668,7 @@ export default function ChallengesLeaderboard({
                 {timedQuestions[timedQuestionIdx].q}
               </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-4">
                 {timedQuestions[timedQuestionIdx].opts.map((opt, idx) => (
                   <button
                     key={idx}
@@ -691,7 +694,7 @@ export default function ChallengesLeaderboard({
                 </div>
               )}
 
-              <div className="flex items-center justify-center gap-3 pt-2">
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 pt-2">
                 <button
                   onClick={startTimedChallenge}
                   className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition"
@@ -721,8 +724,8 @@ export default function ChallengesLeaderboard({
       {/* Tab 3: Daily Quantum Challenge */}
       {activeTab === 'daily' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          <div className="lg:col-span-8 p-6 rounded-xl bg-slate-950 border border-slate-800 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="lg:col-span-8 p-3.5 sm:p-6 rounded-xl bg-slate-950 border border-slate-800 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <Flame className="w-5 h-5 text-amber-400 animate-bounce" />
                 <span className="font-bold text-white text-base">
@@ -747,7 +750,7 @@ export default function ChallengesLeaderboard({
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-2">
               {['H then S', 'X then H', 'H then Z', 'S then X'].map((opt) => (
                 <button
                   key={opt}

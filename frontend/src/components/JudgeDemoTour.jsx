@@ -109,18 +109,18 @@ export default function JudgeDemoTour({
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 max-w-md w-full bg-slate-950/95 border-2 border-cyan-500/70 rounded-2xl p-5 shadow-[0_0_30px_rgba(6,182,212,0.4)] backdrop-blur-xl animate-fadeIn text-slate-100">
+    <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-md z-50 bg-slate-950/95 border-2 border-cyan-500/70 rounded-2xl p-4 sm:p-5 shadow-[0_0_30px_rgba(6,182,212,0.4)] backdrop-blur-xl animate-fadeIn text-slate-100">
       {/* Top Bar */}
       <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
-          <span className="font-bold text-xs uppercase tracking-wider text-cyan-300">
-            QExpo 2026 Judge Guided Walkthrough
+          <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse shrink-0" />
+          <span className="font-bold text-[11px] sm:text-xs uppercase tracking-wider text-cyan-300 truncate">
+            QExpo 2026 Judge Tour
           </span>
         </div>
         <button
           onClick={onClose}
-          className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+          className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 shrink-0"
         >
           <X className="w-4 h-4" />
         </button>

@@ -218,6 +218,17 @@ export default function Navbar({
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
+                if (onOpenTour) onOpenTour();
+              }}
+              className="w-full flex items-center justify-center space-x-2 p-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-cyan-600/30 transition"
+            >
+              <Sparkles className="w-4 h-4 text-cyan-200" />
+              <span>Start Judge Walkthrough Demo</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
                 if (onOpenStudentModal) onOpenStudentModal();
               }}
               className="w-full flex items-center justify-between p-2 rounded-xl bg-slate-900 border border-cyan-500/30 text-xs text-cyan-300 font-semibold"

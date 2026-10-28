@@ -120,15 +120,15 @@ export default function Hero({
         </div>
 
         {/* Hero Title & Tagline */}
-        <div className="text-center max-w-4xl mx-auto mb-10">
-          <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-3">
+        <div className="text-center max-w-4xl mx-auto mb-10 px-2 sm:px-0">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-3">
             Quantum <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-500">Quest</span>
           </h1>
-          <div className="text-xs sm:text-sm font-mono uppercase tracking-widest text-cyan-400 mb-4">
+          <div className="text-[11px] sm:text-sm font-mono uppercase tracking-widest text-cyan-400 mb-3 sm:mb-4">
             The Quantum Circuit Adventure • The Quantum Playground
           </div>
 
-          <p className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-cyan-200 to-slate-200 tracking-wide mb-5">
+          <p className="text-lg sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-cyan-200 to-slate-200 tracking-wide mb-4 sm:mb-5">
             “Learn Quantum. Build Circuits. Master the Quantum Universe!”
           </p>
 
@@ -136,14 +136,14 @@ export default function Hero({
             Step into an educational quantum computing gaming platform. From preparing your first superposition in the <strong className="text-cyan-300">Qubit Explorer</strong>, to commanding the <strong className="text-purple-300">3D Bloch Sphere</strong>, constructing multi-qubit algorithms in the <strong className="text-pink-300">Circuit Designer</strong>, and unraveling spooky action in the <strong className="text-emerald-300">Bell States Explorer</strong>.
           </p>
 
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
+          {/* Action CTAs (Full-width on mobile, row on tablet/desktop) */}
+          <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
             <button
               onClick={() => {
                 sounds.playVictory();
                 onSelectModule('missions');
               }}
-              className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-sm shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all transform hover:-translate-y-0.5"
+              className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-sm shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all transform hover:-translate-y-0.5 min-h-[44px]"
             >
               <Trophy className="w-4 h-4" />
               <span>Start Adventure (Level 1)</span>
@@ -155,7 +155,7 @@ export default function Hero({
                 sounds.playGateClick(500);
                 onSelectModule('gate');
               }}
-              className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 font-bold text-sm shadow-md transition-all hover:border-cyan-400"
+              className="w-full sm:w-auto flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 font-bold text-sm shadow-md transition-all hover:border-cyan-400 min-h-[44px]"
             >
               <BookOpen className="w-4 h-4 text-cyan-400" />
               <span>Explore Quantum Lab</span>
@@ -166,7 +166,7 @@ export default function Hero({
                 sounds.playGateClick(600);
                 onOpenTour();
               }}
-              className="flex items-center space-x-2 px-5 py-3 rounded-xl bg-purple-950/80 hover:bg-purple-900/90 text-purple-200 border border-purple-500/50 font-bold text-sm shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all"
+              className="w-full sm:w-auto flex items-center justify-center space-x-2 px-5 py-3 rounded-xl bg-purple-950/80 hover:bg-purple-900/90 text-purple-200 border border-purple-500/50 font-bold text-sm shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all min-h-[44px]"
             >
               <Sparkles className="w-4 h-4 text-purple-400" />
               <span>Judge Demo Tour (7 Steps)</span>

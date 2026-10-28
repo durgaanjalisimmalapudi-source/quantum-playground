@@ -130,15 +130,15 @@ export default function BellStatesExplorer({ onStateExplored = null }) {
     : [];
 
   return (
-    <div className="bg-slate-900/90 rounded-2xl border border-cyan-500/30 p-6 shadow-2xl backdrop-blur-md">
+    <div className="bg-slate-900/90 rounded-2xl border border-cyan-500/30 p-4 sm:p-6 shadow-2xl backdrop-blur-md">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
               <Zap className="w-5 h-5" />
             </span>
-            <h2 className="text-xl font-bold text-white tracking-wide">
+            <h2 className="text-lg sm:text-xl font-bold text-white tracking-wide">
               Bell States & Quantum Entanglement Explorer
             </h2>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
@@ -151,14 +151,14 @@ export default function BellStatesExplorer({ onStateExplored = null }) {
         </div>
 
         {/* Basis Selector Pills */}
-        <div className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
-          <span className="text-xs text-slate-400 px-2">Measurement Basis:</span>
+        <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800 flex-wrap">
+          <span className="text-[11px] sm:text-xs text-slate-400 px-1 sm:px-2">Basis:</span>
           <button
             onClick={() => {
               sounds.playGateClick(520);
               setBasis('Z');
             }}
-            className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
+            className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-semibold transition ${
               basis === 'Z'
                 ? 'bg-cyan-600 text-white shadow'
                 : 'text-slate-400 hover:text-white'
@@ -171,7 +171,7 @@ export default function BellStatesExplorer({ onStateExplored = null }) {
               sounds.playGateClick(650);
               setBasis('X');
             }}
-            className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
+            className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-semibold transition ${
               basis === 'X'
                 ? 'bg-purple-600 text-white shadow'
                 : 'text-slate-400 hover:text-white'
@@ -183,7 +183,7 @@ export default function BellStatesExplorer({ onStateExplored = null }) {
       </div>
 
       {/* Bell State Selector Cards (4 states) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 mb-6">
         {BELL_STATES.map((b) => (
           <button
             key={b.id}
@@ -191,17 +191,17 @@ export default function BellStatesExplorer({ onStateExplored = null }) {
               sounds.playEntanglement();
               setSelectedStateId(b.id);
             }}
-            className={`p-3.5 rounded-xl border flex flex-col items-start gap-1.5 transition text-left relative overflow-hidden ${
+            className={`p-3 sm:p-3.5 rounded-xl border flex flex-col items-start gap-1 sm:gap-1.5 transition text-left relative overflow-hidden active:scale-95 ${
               selectedStateId === b.id
                 ? 'bg-slate-950 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)] ring-1 ring-cyan-400'
                 : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-400'
             }`}
           >
             <div className="flex items-center justify-between w-full">
-              <span className="font-mono text-lg font-black text-cyan-300">
+              <span className="font-mono text-base sm:text-lg font-black text-cyan-300">
                 {b.label}
               </span>
-              <span className="text-[10px] uppercase font-bold text-slate-500">
+              <span className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-500">
                 {b.parity.split(' ')[0]}
               </span>
             </div>
@@ -220,22 +220,22 @@ export default function BellStatesExplorer({ onStateExplored = null }) {
         {/* Left Column: Visual Entanglement Link & Circuit (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
           {/* Animated 2-Qubit Entanglement Stage */}
-          <div className="p-6 rounded-xl bg-slate-950 border border-slate-800 relative overflow-hidden shadow-inner flex flex-col items-center justify-center min-h-[220px]">
+          <div className="p-4 sm:p-6 rounded-xl bg-slate-950 border border-slate-800 relative overflow-hidden shadow-inner flex flex-col items-center justify-center min-h-[200px] sm:min-h-[220px]">
             {/* Background glowing particles */}
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-950/20 via-purple-950/20 to-cyan-950/20 pointer-events-none" />
 
-            <div className="flex items-center justify-between w-full max-w-md z-10 px-6">
+            <div className="flex items-center justify-between w-full max-w-md z-10 px-2 sm:px-6">
               {/* Qubit A */}
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 rounded-full bg-cyan-600/30 border-2 border-cyan-400 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.6)] relative">
-                  <span className="text-sm font-mono font-bold text-white">Qubit A</span>
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-cyan-600/30 border-2 border-cyan-400 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.6)] relative">
+                  <span className="text-xs sm:text-sm font-mono font-bold text-white">Qubit A</span>
                   <div className="absolute -inset-1 rounded-full border border-cyan-400/30 animate-ping opacity-25" />
                 </div>
-                <span className="text-xs font-mono text-cyan-300 mt-2">Wire q0</span>
+                <span className="text-[11px] sm:text-xs font-mono text-cyan-300 mt-2">Wire q0</span>
               </div>
 
               {/* Shimmering Entanglement Link Line */}
-              <div className="flex-1 mx-4 relative flex items-center justify-center">
+              <div className="flex-1 mx-2 sm:mx-4 relative flex items-center justify-center">
                 <div className="w-full h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full shadow-[0_0_12px_rgba(168,85,247,0.8)]" />
                 {/* Traveling photon/correlation pulses */}
                 <div
@@ -244,26 +244,26 @@ export default function BellStatesExplorer({ onStateExplored = null }) {
                     left: `${(Math.sin((animPulse * Math.PI) / 25) + 1) * 45}%`,
                   }}
                 />
-                <span className="absolute -top-5 text-[10px] font-mono text-purple-300 uppercase tracking-widest bg-slate-900/90 px-2 py-0.5 rounded border border-purple-500/30">
+                <span className="absolute -top-5 text-[9px] sm:text-[10px] font-mono text-purple-300 uppercase tracking-widest bg-slate-900/90 px-1.5 sm:px-2 py-0.5 rounded border border-purple-500/30 whitespace-nowrap">
                   Entangled Link
                 </span>
               </div>
 
               {/* Qubit B */}
               <div className="flex flex-col items-center">
-                <div className="w-16 h-16 rounded-full bg-purple-600/30 border-2 border-purple-400 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.6)] relative">
-                  <span className="text-sm font-mono font-bold text-white">Qubit B</span>
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-purple-600/30 border-2 border-purple-400 flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.6)] relative">
+                  <span className="text-xs sm:text-sm font-mono font-bold text-white">Qubit B</span>
                   <div className="absolute -inset-1 rounded-full border border-purple-400/30 animate-ping opacity-25" />
                 </div>
-                <span className="text-xs font-mono text-purple-300 mt-2">Wire q1</span>
+                <span className="text-[11px] sm:text-xs font-mono text-purple-300 mt-2">Wire q1</span>
               </div>
             </div>
 
-            <div className="mt-6 text-center z-10">
-              <span className="text-sm font-bold text-white font-mono block">
+            <div className="mt-5 sm:mt-6 text-center z-10">
+              <span className="text-xs sm:text-sm font-bold text-white font-mono block">
                 {activeBell.math}
               </span>
-              <span className="text-xs text-slate-400 mt-1 block">
+              <span className="text-[11px] sm:text-xs text-slate-400 mt-1 block">
                 Parity: <strong className="text-cyan-300">{activeBell.parity}</strong> • Phase: <strong className="text-purple-300">{activeBell.phase}</strong>
               </span>
             </div>

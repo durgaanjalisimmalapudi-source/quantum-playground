@@ -71,10 +71,10 @@ export default function TeamSection() {
   };
 
   return (
-    <section className="py-16 border-t border-slate-800/80 bg-slate-950/60">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <section className="py-10 sm:py-16 border-t border-slate-800/80 bg-slate-950/60">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-16">
         {/* About Section: Educational Purpose & Key Innovations */}
-        <div className="p-8 rounded-3xl bg-slate-900/90 border border-cyan-500/30 shadow-2xl backdrop-blur-md space-y-6">
+        <div className="p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-slate-900/90 border border-cyan-500/30 shadow-2xl backdrop-blur-md space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
             <div className="flex items-center gap-2">
               <span className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
@@ -141,7 +141,7 @@ export default function TeamSection() {
             {members.map((member) => (
               <div
                 key={member.id}
-                className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between space-y-4 shadow-xl"
+                className="p-4 sm:p-6 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between space-y-4 shadow-xl"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">

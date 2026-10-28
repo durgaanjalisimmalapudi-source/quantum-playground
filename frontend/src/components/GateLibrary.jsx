@@ -302,15 +302,15 @@ export default function GateLibrary() {
   };
 
   return (
-    <div className="bg-slate-900/90 rounded-2xl border border-indigo-500/30 p-6 shadow-2xl backdrop-blur-md">
+    <div className="bg-slate-900/90 rounded-2xl border border-indigo-500/30 p-4 sm:p-6 shadow-2xl backdrop-blur-md">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
               <BookOpen className="w-5 h-5" />
             </span>
-            <h2 className="text-xl font-bold text-white tracking-wide">
+            <h2 className="text-lg sm:text-xl font-bold text-white tracking-wide">
               Quantum Gate Academy & Library
             </h2>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
@@ -323,7 +323,7 @@ export default function GateLibrary() {
         </div>
 
         {/* Category Filters */}
-        <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
+        <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800 overflow-x-auto self-start sm:self-auto">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -331,7 +331,7 @@ export default function GateLibrary() {
                 sounds.playGateClick(500);
                 setCategoryFilter(cat);
               }}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
+              className={`shrink-0 px-3 py-1 rounded-lg text-xs font-medium transition ${
                 categoryFilter === cat
                   ? 'bg-indigo-600 text-white shadow'
                   : 'text-slate-400 hover:text-white'

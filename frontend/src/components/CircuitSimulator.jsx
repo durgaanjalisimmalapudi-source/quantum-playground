@@ -243,15 +243,15 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
     : [];
 
   return (
-    <div className="bg-slate-900/90 rounded-2xl border border-pink-500/30 p-6 shadow-2xl backdrop-blur-md">
+    <div className="bg-slate-900/90 rounded-2xl border border-pink-500/30 p-4 sm:p-6 shadow-2xl backdrop-blur-md">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="p-2 rounded-lg bg-pink-500/10 border border-pink-500/30 text-pink-400">
               <Cpu className="w-5 h-5" />
             </span>
-            <h2 className="text-xl font-bold text-white tracking-wide">
+            <h2 className="text-lg sm:text-xl font-bold text-white tracking-wide">
               Quantum Circuit Designer & Simulator
             </h2>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-pink-500/20 text-pink-300 border border-pink-500/30">
@@ -264,8 +264,8 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
         </div>
 
         {/* Top Controls: Shots & Engine Status */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs text-slate-300">
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <div className="flex items-center gap-1.5 bg-slate-950 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-800 text-xs text-slate-300">
             <span className="text-slate-500">Shots:</span>
             {[100, 1024, 4096].map((s) => (
               <button
@@ -282,7 +282,7 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
 
           <button
             onClick={handleClearCircuit}
-            className="px-3 py-1.5 rounded-xl text-xs font-medium bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 flex items-center gap-1.5 transition"
+            className="px-3 py-1.5 rounded-xl text-xs font-medium bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 flex items-center gap-1.5 transition ml-auto sm:ml-0"
           >
             <Trash2 className="w-3.5 h-3.5" />
             Clear
@@ -295,15 +295,15 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
         <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
           Load Landmark Circuit Presets:
         </span>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
           {PRESET_CIRCUITS.map((p) => (
             <button
               key={p.name}
               onClick={() => loadPreset(p)}
-              className="px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-pink-500/40 text-xs font-medium text-slate-200 transition flex items-center gap-1.5 group"
+              className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-pink-500/40 text-xs font-medium text-slate-200 transition flex items-center gap-1.5 group active:scale-95"
             >
               <Sparkles className="w-3.5 h-3.5 text-pink-400 group-hover:scale-110 transition-transform" />
-              {p.name}
+              <span>{p.name}</span>
             </button>
           ))}
         </div>
@@ -311,38 +311,37 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
 
       {/* Circuit Configuration Bar: Wire Count & Palette */}
       <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 mb-6 space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           {/* Wire Selector */}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400">Wires (Qubits):</span>
+            <span className="text-xs text-slate-400">Wires:</span>
             {[1, 2, 3, 4].map((n) => (
               <button
                 key={n}
                 onClick={() => {
                   sounds.playGateClick(520);
                   setNumQubits(n);
-                  // Prune any gates that reference wires beyond n
                   setGates((prev) =>
                     prev.filter((g) => g.target < n && (g.control === undefined || g.control < n))
                   );
                 }}
-                className={`w-8 h-8 rounded-lg font-mono text-xs font-bold transition ${
+                className={`w-9 h-9 sm:w-8 sm:h-8 rounded-lg font-mono text-xs font-bold transition ${
                   numQubits === n
                     ? 'bg-pink-600 text-white shadow'
                     : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
                 }`}
               >
-                {n}
+                q{n}
               </button>
             ))}
           </div>
 
           {/* Add Gate Form */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
             <select
               value={selectedGateToAdd}
               onChange={(e) => setSelectedGateToAdd(e.target.value)}
-              className="bg-slate-900 border border-slate-700 text-cyan-300 text-xs font-bold rounded-lg px-3 py-2 outline-none"
+              className="bg-slate-900 border border-slate-700 text-cyan-300 text-xs font-bold rounded-lg px-2.5 py-2 outline-none flex-1 sm:flex-none min-h-[38px]"
             >
               {AVAILABLE_GATES.map((g) => (
                 <option key={g.name} value={g.name}>
@@ -357,7 +356,7 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
               <select
                 value={targetWire}
                 onChange={(e) => setTargetWire(Number(e.target.value))}
-                className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1.5 font-mono"
+                className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1.5 font-mono min-h-[38px]"
               >
                 {Array.from({ length: numQubits }).map((_, idx) => (
                   <option key={idx} value={idx}>
@@ -374,7 +373,7 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
                 <select
                   value={controlWire}
                   onChange={(e) => setControlWire(Number(e.target.value))}
-                  className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1.5 font-mono"
+                  className="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-2 py-1.5 font-mono min-h-[38px]"
                 >
                   {Array.from({ length: numQubits }).map((_, idx) => (
                     <option key={idx} value={idx}>
@@ -387,7 +386,7 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
 
             <button
               onClick={handleAddGate}
-              className="px-3 py-2 rounded-lg bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-md shadow-pink-600/30 transition"
+              className="px-4 py-2 rounded-lg bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-pink-600/30 transition min-h-[38px] w-full sm:w-auto mt-2 sm:mt-0"
             >
               <Plus className="w-3.5 h-3.5" />
               Add Gate
@@ -396,9 +395,14 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
         </div>
       </div>
 
+      {/* Mobile Swipe Hint */}
+      <div className="sm:hidden text-[10px] text-pink-300 font-mono mb-2 flex items-center justify-center gap-1.5 bg-pink-950/40 p-2 rounded-lg border border-pink-500/20">
+        <span>↔️ Swipe horizontally to view and tap gate wires</span>
+      </div>
+
       {/* Visual Circuit Diagram Wire Canvas */}
-      <div className="p-6 rounded-xl bg-slate-950 border border-slate-800 shadow-inner mb-6 overflow-x-auto">
-        <div className="min-w-[650px] space-y-6">
+      <div className="p-4 sm:p-6 rounded-xl bg-slate-950 border border-slate-800 shadow-inner mb-6 overflow-x-auto touch-pan-x">
+        <div className="min-w-[620px] space-y-6">
           {Array.from({ length: numQubits }).map((_, wireIdx) => {
             const initVal = initialStates[wireIdx] || '0';
             return (
@@ -490,8 +494,8 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
       </div>
 
       {/* Step-by-Step Execution Player */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-slate-950/80 border border-slate-800 mb-6">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-slate-950/80 border border-slate-800 mb-6">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={stepBackward}
             disabled={currentStep <= -1}
@@ -525,21 +529,21 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
             <ChevronRight className="w-4 h-4" />
           </button>
 
-          <span className="text-xs font-mono text-slate-400 ml-2">
-            Execution Step:{' '}
+          <span className="text-xs font-mono text-slate-400 ml-1 sm:ml-2">
+            Step:{' '}
             <strong className="text-pink-300">
-              {currentStep === -1 ? 'Final State (All Gates)' : `Step ${currentStep + 1} of ${gates.length}`}
+              {currentStep === -1 ? 'Final State' : `${currentStep + 1}/${gates.length}`}
             </strong>
           </span>
         </div>
 
         {/* Engine status indicator */}
-        <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>
+        <div className="flex items-center gap-2 text-[11px] sm:text-xs font-mono text-slate-400">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <span className="truncate">
             {simResult?.isBackend
-              ? 'Simulated on Qiskit Aer (Backend API)'
-              : 'Simulated on Client-Side Quantum Engine'}
+              ? 'Qiskit Aer Simulator (Backend API)'
+              : 'Client-Side Quantum Engine'}
           </span>
         </div>
       </div>
@@ -547,42 +551,42 @@ export default function CircuitSimulator({ onCircuitCompleted = null }) {
       {/* Simulation Output Dashboard */}
       {simResult && (
         <div className="space-y-4">
-          {/* Subtabs: Probabilities / Statevector / QASM & ASCII */}
-          <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+          {/* Subtabs: Probabilities / Statevector / QASM & ASCII (Responsive scroll on mobile) */}
+          <div className="flex items-center gap-2 border-b border-slate-800 pb-2 overflow-x-auto">
             <button
               onClick={() => setActiveTab('probabilities')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
+              className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
                 activeTab === 'probabilities'
                   ? 'bg-pink-600 text-white'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
               <BarChart2 className="w-3.5 h-3.5" />
-              Measurement Probabilities & Counts
+              Probabilities & Counts
             </button>
 
             <button
               onClick={() => setActiveTab('statevector')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
+              className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
                 activeTab === 'statevector'
                   ? 'bg-pink-600 text-white'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
-              Statevector ({simResult.statevector?.length} Amplitudes)
+              Statevector ({simResult.statevector?.length})
             </button>
 
             <button
               onClick={() => setActiveTab('qasm')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
+              className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition ${
                 activeTab === 'qasm'
                   ? 'bg-pink-600 text-white'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
               <Code className="w-3.5 h-3.5" />
-              ASCII & QASM Code
+              ASCII & QASM
             </button>
           </div>
 

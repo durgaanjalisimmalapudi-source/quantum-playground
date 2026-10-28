@@ -68,8 +68,8 @@ export default function StudentSessionModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-xl bg-slate-950 border-2 border-cyan-500/40 rounded-3xl p-6 sm:p-8 shadow-[0_0_50px_rgba(6,182,212,0.25)] text-slate-100 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fadeIn overflow-y-auto">
+      <div className="relative w-full max-w-xl max-h-[92vh] overflow-y-auto bg-slate-950 border-2 border-cyan-500/40 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-[0_0_50px_rgba(6,182,212,0.25)] text-slate-100">
         {/* Close Button */}
         <button
           onClick={onClose}

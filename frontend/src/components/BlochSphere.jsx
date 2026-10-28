@@ -346,7 +346,7 @@ export default function BlochSphere({ onGateApplied = null }) {
     return () => cancelAnimationFrame(animationFrameId);
   }, [cameraRot, autoRotate]);
 
-  // Mouse drag handlers for 3D rotation
+  // Mouse & Touch drag handlers for 3D rotation
   const handleMouseDown = (e) => {
     isDraggingRef.current = true;
     lastMouseRef.current = { x: e.clientX, y: e.clientY };
@@ -368,16 +368,40 @@ export default function BlochSphere({ onGateApplied = null }) {
     isDraggingRef.current = false;
   };
 
+  // Touch event handlers for mobile devices
+  const handleTouchStart = (e) => {
+    if (e.touches && e.touches.length > 0) {
+      isDraggingRef.current = true;
+      lastMouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDraggingRef.current || !e.touches || e.touches.length === 0) return;
+    const dx = e.touches[0].clientX - lastMouseRef.current.x;
+    const dy = e.touches[0].clientY - lastMouseRef.current.y;
+    lastMouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+
+    setCameraRot((prev) => ({
+      yaw: prev.yaw + dx * 0.012,
+      pitch: Math.max(-Math.PI / 2 + 0.1, Math.min(Math.PI / 2 - 0.1, prev.pitch - dy * 0.012)),
+    }));
+  };
+
+  const handleTouchEnd = () => {
+    isDraggingRef.current = false;
+  };
+
   return (
-    <div className="bg-slate-900/90 rounded-2xl border border-cyan-500/30 p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
+    <div className="bg-slate-900/90 rounded-2xl border border-cyan-500/30 p-4 sm:p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
               <Compass className="w-5 h-5" />
             </span>
-            <h2 className="text-xl font-bold text-white tracking-wide">
+            <h2 className="text-lg sm:text-xl font-bold text-white tracking-wide">
               Interactive 3D Bloch Sphere
             </h2>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
@@ -385,15 +409,15 @@ export default function BlochSphere({ onGateApplied = null }) {
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Drag to rotate 3D view. Apply quantum gates to observe unitary rotations & statevector trajectories.
+            Touch or drag to rotate 3D view. Apply quantum gates to observe unitary rotations & statevector trajectories.
           </p>
         </div>
 
         {/* Top Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
           <button
             onClick={() => setAutoRotate(!autoRotate)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition ${
               autoRotate
                 ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/50'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
@@ -405,15 +429,15 @@ export default function BlochSphere({ onGateApplied = null }) {
 
           <button
             onClick={() => setShowPhaseExplainer(!showPhaseExplainer)}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-purple-500/10 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 flex items-center gap-1.5 transition"
+            className="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium bg-purple-500/10 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 flex items-center gap-1.5 transition"
           >
             <HelpCircle className="w-3.5 h-3.5" />
-            Global vs Relative Phase
+            Phase Details
           </button>
 
           <button
             onClick={resetState}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 flex items-center gap-1.5 transition"
+            className="px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 flex items-center gap-1.5 transition"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset |0⟩
@@ -431,7 +455,7 @@ export default function BlochSphere({ onGateApplied = null }) {
             </span>
             <button
               onClick={() => setShowPhaseExplainer(false)}
-              className="text-purple-400 hover:text-white"
+              className="text-purple-400 hover:text-white p-1"
             >
               ✕
             </button>
@@ -448,36 +472,41 @@ export default function BlochSphere({ onGateApplied = null }) {
       {/* Main Grid: 3D Canvas + Readout Panels */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: 3D Canvas (7 cols) */}
-        <div className="lg:col-span-7 flex flex-col items-center">
+        <div className="lg:col-span-7 flex flex-col items-center w-full">
           <div
-            className="w-full aspect-square max-w-[460px] relative rounded-xl border border-slate-800 bg-slate-950/80 cursor-grab active:cursor-grabbing select-none shadow-inner flex items-center justify-center"
+            className="w-full aspect-square max-w-[340px] sm:max-w-[440px] relative rounded-xl border border-slate-800 bg-slate-950/80 cursor-grab active:cursor-grabbing select-none shadow-inner flex items-center justify-center touch-none"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
           >
             <canvas
               ref={canvasRef}
               width={460}
               height={460}
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain pointer-events-none"
             />
-            <div className="absolute bottom-3 left-3 text-[10px] text-slate-500 font-mono bg-slate-900/80 px-2 py-1 rounded border border-slate-800 pointer-events-none">
+            <div className="absolute bottom-2.5 left-2.5 text-[9px] sm:text-[10px] text-slate-400 font-mono bg-slate-900/90 px-2 py-1 rounded border border-slate-800 pointer-events-none">
               Yaw: {(cameraRot.yaw % (Math.PI * 2)).toFixed(2)} rad • Pitch: {cameraRot.pitch.toFixed(2)} rad
             </div>
-            <div className="absolute top-3 right-3 text-[10px] text-cyan-400 font-mono bg-cyan-950/60 px-2 py-1 rounded border border-cyan-500/30 pointer-events-none">
-              3D Quantum Projection
+            <div className="absolute top-2.5 right-2.5 text-[9px] sm:text-[10px] text-cyan-400 font-mono bg-cyan-950/80 px-2 py-1 rounded border border-cyan-500/30 pointer-events-none flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              <span>Drag / Touch to Rotate</span>
             </div>
           </div>
 
           {/* Quick Preset Buttons */}
           <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5 w-full">
-            <span className="text-xs text-slate-400 mr-2">Basis Presets:</span>
+            <span className="text-xs text-slate-400 mr-1 sm:mr-2">Basis Presets:</span>
             {['0', '1', '+', '-', '+i', '-i'].map((st) => (
               <button
                 key={st}
                 onClick={() => setPreset(st)}
-                className="px-2.5 py-1 rounded bg-slate-800/80 hover:bg-slate-700 text-xs font-mono text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition"
+                className="px-2.5 py-1.5 min-h-[36px] rounded-lg bg-slate-800/80 hover:bg-slate-700 text-xs font-mono text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition active:scale-95"
               >
                 |{st}⟩
               </button>
@@ -486,7 +515,7 @@ export default function BlochSphere({ onGateApplied = null }) {
         </div>
 
         {/* Right: Controls & Quantum State Mathematics (5 cols) */}
-        <div className="lg:col-span-5 space-y-4">
+        <div className="lg:col-span-5 space-y-4 w-full">
           {/* Live State Vector & Probabilities */}
           <div className="p-4 rounded-xl bg-slate-950/90 border border-slate-800 space-y-3">
             <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
@@ -500,7 +529,7 @@ export default function BlochSphere({ onGateApplied = null }) {
             </div>
 
             {/* Bra-Ket Formula */}
-            <div className="p-2.5 rounded-lg bg-slate-900/90 border border-cyan-500/20 text-center font-mono text-sm text-cyan-200">
+            <div className="p-2.5 rounded-lg bg-slate-900/90 border border-cyan-500/20 text-center font-mono text-xs sm:text-sm text-cyan-200 break-words">
               |ψ⟩ = ({c0.format()})|0⟩ + ({c1.format()})|1⟩
             </div>
 
@@ -534,7 +563,7 @@ export default function BlochSphere({ onGateApplied = null }) {
             </div>
 
             {/* Bloch Coordinates Grid */}
-            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800 text-[11px] font-mono text-slate-300">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-slate-800 text-[11px] font-mono text-slate-300">
               <div className="bg-slate-900 p-2 rounded border border-slate-800/80">
                 <span className="text-slate-500 block">Spherical Angles:</span>
                 θ = {bloch.theta.toFixed(3)} rad ({bloch.thetaDeg}°)<br />
@@ -556,10 +585,10 @@ export default function BlochSphere({ onGateApplied = null }) {
             </span>
 
             {/* Standard Pauli & Clifford Gates */}
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 onClick={() => applyGate('X')}
-                className="py-2 px-3 rounded-lg bg-indigo-950/60 hover:bg-indigo-900 border border-indigo-500/40 text-indigo-200 font-bold text-xs flex flex-col items-center gap-0.5 transition"
+                className="py-2.5 px-3 rounded-lg bg-indigo-950/60 hover:bg-indigo-900 active:scale-95 border border-indigo-500/40 text-indigo-200 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition min-h-[44px]"
                 title="Pauli-X (NOT / 180° around X)"
               >
                 <span>X</span>
@@ -568,7 +597,7 @@ export default function BlochSphere({ onGateApplied = null }) {
 
               <button
                 onClick={() => applyGate('Y')}
-                className="py-2 px-3 rounded-lg bg-sky-950/60 hover:bg-sky-900 border border-sky-500/40 text-sky-200 font-bold text-xs flex flex-col items-center gap-0.5 transition"
+                className="py-2.5 px-3 rounded-lg bg-sky-950/60 hover:bg-sky-900 active:scale-95 border border-sky-500/40 text-sky-200 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition min-h-[44px]"
                 title="Pauli-Y (180° around Y)"
               >
                 <span>Y</span>
@@ -577,7 +606,7 @@ export default function BlochSphere({ onGateApplied = null }) {
 
               <button
                 onClick={() => applyGate('Z')}
-                className="py-2 px-3 rounded-lg bg-purple-950/60 hover:bg-purple-900 border border-purple-500/40 text-purple-200 font-bold text-xs flex flex-col items-center gap-0.5 transition"
+                className="py-2.5 px-3 rounded-lg bg-purple-950/60 hover:bg-purple-900 active:scale-95 border border-purple-500/40 text-purple-200 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition min-h-[44px]"
                 title="Pauli-Z (180° around Z)"
               >
                 <span>Z</span>
@@ -586,7 +615,7 @@ export default function BlochSphere({ onGateApplied = null }) {
 
               <button
                 onClick={() => applyGate('H')}
-                className="py-2 px-3 rounded-lg bg-cyan-950/60 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-200 font-bold text-xs flex flex-col items-center gap-0.5 transition"
+                className="py-2.5 px-3 rounded-lg bg-cyan-950/60 hover:bg-cyan-900 active:scale-95 border border-cyan-500/40 text-cyan-200 font-bold text-xs flex flex-col items-center justify-center gap-0.5 transition min-h-[44px]"
                 title="Hadamard (Superposition generator / (X+Z)/√2 axis)"
               >
                 <span>H</span>
@@ -598,21 +627,21 @@ export default function BlochSphere({ onGateApplied = null }) {
             <div className="grid grid-cols-3 gap-2">
               <button
                 onClick={() => applyGate('S')}
-                className="py-2 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-mono text-xs text-center transition"
+                className="py-2.5 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-700 text-slate-200 font-mono text-xs text-center transition min-h-[40px]"
                 title="S gate: π/2 phase around Z"
               >
                 S (π/2)
               </button>
               <button
                 onClick={() => applyGate('T')}
-                className="py-2 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-mono text-xs text-center transition"
+                className="py-2.5 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-700 text-slate-200 font-mono text-xs text-center transition min-h-[40px]"
                 title="T gate: π/4 phase around Z"
               >
                 T (π/4)
               </button>
               <button
                 onClick={() => applyGate('RX', Math.PI / 2)}
-                className="py-2 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-mono text-xs text-center transition"
+                className="py-2.5 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-700 text-slate-200 font-mono text-xs text-center transition min-h-[40px]"
                 title="RX(π/2): 90° rotation around X axis"
               >
                 RX(π/2)
@@ -622,14 +651,14 @@ export default function BlochSphere({ onGateApplied = null }) {
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => applyGate('RY', Math.PI / 2)}
-                className="py-2 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-mono text-xs text-center transition"
+                className="py-2.5 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-700 text-slate-200 font-mono text-xs text-center transition min-h-[40px]"
                 title="RY(π/2): 90° rotation around Y axis"
               >
                 RY(π/2)
               </button>
               <button
                 onClick={() => applyGate('RZ', Math.PI / 2)}
-                className="py-2 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-mono text-xs text-center transition"
+                className="py-2.5 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-700 text-slate-200 font-mono text-xs text-center transition min-h-[40px]"
                 title="RZ(π/2): 90° rotation around Z axis"
               >
                 RZ(π/2)

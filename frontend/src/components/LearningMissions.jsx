@@ -456,15 +456,15 @@ export default function LearningMissions({
   };
 
   return (
-    <div className="bg-slate-900/90 rounded-2xl border border-blue-500/30 p-6 shadow-2xl backdrop-blur-md">
+    <div className="bg-slate-900/90 rounded-2xl border border-blue-500/30 p-4 sm:p-6 shadow-2xl backdrop-blur-md">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-800 pb-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400">
               <Trophy className="w-5 h-5" />
             </span>
-            <h2 className="text-xl font-bold text-white tracking-wide">
+            <h2 className="text-lg sm:text-xl font-bold text-white tracking-wide">
               Beginner-to-Advanced Quantum Gaming Journey
             </h2>
           </div>
@@ -474,7 +474,7 @@ export default function LearningMissions({
         </div>
 
         {/* Global Progress Pill */}
-        <div className="flex items-center gap-3 bg-slate-950 px-4 py-2 rounded-xl border border-slate-800">
+        <div className="flex items-center gap-3 bg-slate-950 px-3.5 py-1.5 rounded-xl border border-slate-800 self-start sm:self-auto">
           <div className="text-right">
             <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
               Player Rank:
@@ -483,14 +483,14 @@ export default function LearningMissions({
               Level {playerLevel} • {playerXp} XP
             </span>
           </div>
-          <div className="w-9 h-9 rounded-lg bg-cyan-600/20 border border-cyan-500/40 flex items-center justify-center font-bold text-cyan-300">
+          <div className="w-8 h-8 rounded-lg bg-cyan-600/20 border border-cyan-500/40 flex items-center justify-center font-bold text-cyan-300 text-xs">
             {playerLevel}
           </div>
         </div>
       </div>
 
       {/* Level Selector Cards Navigation (Levels 1 to 7) */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-2.5 mb-6">
         {MISSIONS_DATA.map((m) => {
           const unlocked = m.id <= playerLevel || completedMissions.includes(m.id);
           const isCompleted = completedMissions.includes(m.id);
@@ -500,7 +500,7 @@ export default function LearningMissions({
             <button
               key={m.id}
               onClick={() => handleLevelSelect(m.id)}
-              className={`p-3 rounded-xl border flex flex-col items-center justify-between gap-2 transition text-center relative ${
+              className={`p-2.5 sm:p-3 rounded-xl border flex flex-col items-center justify-between gap-1.5 sm:gap-2 transition text-center relative active:scale-95 ${
                 isSelected
                   ? 'bg-blue-950/80 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)] ring-1 ring-cyan-400'
                   : unlocked
@@ -521,11 +521,11 @@ export default function LearningMissions({
                 )}
               </div>
 
-              <div className="text-xs font-bold truncate w-full">
+              <div className="text-[11px] sm:text-xs font-bold truncate w-full">
                 {m.title.split(':')[1]?.trim() || m.title}
               </div>
 
-              <span className="text-[10px] font-mono text-slate-500">
+              <span className="text-[9px] sm:text-[10px] font-mono text-slate-500">
                 +{m.xpReward} XP
               </span>
             </button>
@@ -534,11 +534,11 @@ export default function LearningMissions({
       </div>
 
       {/* Selected Mission Active Card */}
-      <div className="p-6 rounded-xl bg-slate-950 border border-slate-800 space-y-6">
+      <div className="p-4 sm:p-6 rounded-xl bg-slate-950 border border-slate-800 space-y-5 sm:space-y-6">
         {/* Mission Banner */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                 Level {mission.id} of 7
               </span>
@@ -546,24 +546,24 @@ export default function LearningMissions({
                 Badge: {mission.badge}
               </span>
             </div>
-            <h3 className="text-2xl font-bold text-white mt-1">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">
               {mission.title}
             </h3>
             <p className="text-xs text-slate-400">{mission.subtitle}</p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-amber-400 font-bold font-mono">
-              Reward: +{mission.xpReward} XP
+          <div>
+            <span className="text-xs text-amber-400 font-bold font-mono bg-amber-950/60 px-2.5 py-1 rounded-lg border border-amber-500/30">
+              +{mission.xpReward} XP Reward
             </span>
           </div>
         </div>
 
-        {/* 4 Mission Sub-Tabs: Explanation / Interactive Activity / Challenge / Quiz */}
-        <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+        {/* 4 Mission Sub-Tabs: Explanation / Interactive Activity / Challenge / Quiz (Scrollable on mobile) */}
+        <div className="flex items-center gap-1.5 sm:gap-2 border-b border-slate-800 pb-2 overflow-x-auto">
           <button
             onClick={() => setActiveSubTab('explanation')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               activeSubTab === 'explanation'
                 ? 'bg-blue-600 text-white shadow'
                 : 'text-slate-400 hover:text-white'
@@ -574,7 +574,7 @@ export default function LearningMissions({
 
           <button
             onClick={() => setActiveSubTab('activity')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               activeSubTab === 'activity'
                 ? 'bg-blue-600 text-white shadow'
                 : 'text-slate-400 hover:text-white'
@@ -585,7 +585,7 @@ export default function LearningMissions({
 
           <button
             onClick={() => setActiveSubTab('challenge')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               activeSubTab === 'challenge'
                 ? 'bg-blue-600 text-white shadow'
                 : 'text-slate-400 hover:text-white'
@@ -596,13 +596,13 @@ export default function LearningMissions({
 
           <button
             onClick={() => setActiveSubTab('quiz')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               activeSubTab === 'quiz'
                 ? 'bg-blue-600 text-white shadow'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            4. Short Quiz (3 Questions)
+            4. Short Quiz
           </button>
         </div>
 
